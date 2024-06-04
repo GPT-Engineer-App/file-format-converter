@@ -1,0 +1,24 @@
+import pickle
+import h5py
+
+# pklファイルのパス
+pkl_file_path = 'path/to/your/file.pkl'
+
+# h5ファイルのパス
+h5_file_path = 'path/to/your/file.h5'
+
+# pklファイルを読み込む
+with open(pkl_file_path, 'rb') as pkl_file:
+    data = pickle.load(pkl_file)
+
+# h5ファイルにデータを保存する
+with h5py.File(h5_file_path, 'w') as h5_file:
+    # データが辞書型の場合、各キーごとにデータセットを作成する
+    if isinstance(data, dict):
+        for key, value in data.items():
+            h5_file.create_dataset(key, data=value)
+    else:
+        # データが辞書型でない場合、デフォルトのデータセットを作成する
+        h5_file.create_dataset('data', data=data)
+
+print(f"Data has been successfully converted from {pkl_file_path} to {h5_file_path}")
